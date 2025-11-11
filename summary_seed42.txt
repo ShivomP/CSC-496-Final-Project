@@ -1,0 +1,20 @@
+
+PPO on Atari Pong - Baseline Results
+
+training version:
+seed: 42
+timesteps: 10,000,000
+hyperparameters moded: baseline
+
+results:
+episodes completed: 100
+mean return: -20.70 ± 0.50
+target (>=18) reached: False
+steps to target: none
+
+evaluation (n=20):
+mean return: 6.95 ± 5.37
+median: 7.50
+range: [-10.0, 15.0]
+
+files saved to: /content/drive/MyDrive/PPO_Pong_Project

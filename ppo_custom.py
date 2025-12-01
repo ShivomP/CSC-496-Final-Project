@@ -562,48 +562,6 @@ runtime.unassign()
 
 plot_multi_seed_learning_curves(SEEDS, "custom")
 
-def aggregate_results(seeds, experiment_name="custom"):
-    """
-    Aggregate results from multiple seeds and compute statistics.
-    """
-    all_steps_to_target = []
-    all_mean_returns = []
-
-    for seed in seeds:
-        metrics_file = f"{project_dir}/metrics/{experiment_name}_seed{seed}_metrics.json"
-        if os.path.exists(metrics_file):
-            with open(metrics_file, 'r') as f:
-                data = json.load(f)
-
-                if data['results']['steps_to_target']:
-                    all_steps_to_target.append(data['results']['steps_to_target'])
-                all_mean_returns.append(data['results']['mean_return'])
-
-                print(f"Seed {seed}:")
-                print(f"Episodes: {data['results']['episodes_completed']}")
-                print(f"Mean return: {data['results']['mean_return']:.2f} ± {data['results']['std_return']:.2f}")
-                print(f"Target reached: {data['results']['target_reached']}")
-                if data['results']['steps_to_target']:
-                    print(f"Steps to target: {data['results']['steps_to_target']:,}")
-
-    if all_steps_to_target:
-        mean_steps = np.mean(all_steps_to_target)
-        std_steps = np.std(all_steps_to_target)
-        ci_95 = 1.96 * std_steps / np.sqrt(len(all_steps_to_target))
-        print(f"Steps to target: {mean_steps:,.0f} ± {ci_95:,.0f} (95% CI)")
-        print(f"Seeds reaching target: {len(all_steps_to_target)}/{len(seeds)}")
-    else:
-        print("No seeds reached target.")
-
-    print(f"Mean return across seeds: {np.mean(all_mean_returns):.2f} ± {np.std(all_mean_returns):.2f}")
-
-    return {
-        'steps_to_target': all_steps_to_target,
-        'mean_returns': all_mean_returns,
-    }
-
-custom_results = aggregate_results(SEEDS, "custom")
-
 def generate_summary_report(seeds, experiment_name="custom"):
     report = []
     report.append(f"PPO on Atari Pong - {experiment_name.upper()} Results")
